@@ -20,7 +20,7 @@ stream_url_format = 'http://www.jango.com/streams/{}'
 # 113280941
 # 321275470
 def main():
-    station_id = 113280941
+    station_id = 359216899
     stream_url = stream_url_format.format(station_id)
     cookies = ''
     for i in range(100):
@@ -40,7 +40,11 @@ def main():
         artist = tags['artist'].replace('/', '&')
         song_name = tags['song']
         genre = tags['genre']
-        album = re.findall(u'on</span> (.*)</div>\\\\n</div>', tags_content)[0]
+        album_result = re.findall(u'on</span> (.*)</div>\\\\n</div>', tags_content)
+        if len(album_result) > 0:
+            album = album_result[0]
+        else:
+            album = ''
 
         if not os.path.exists(artist):
             os.mkdir(artist)
