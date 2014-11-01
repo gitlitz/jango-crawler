@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import html
 
 from mutagen.easymp4 import EasyMP4
 from mutagen.id3 import ID3, APIC, error
@@ -13,7 +14,7 @@ from mutagen.easyid3 import EasyID3, mutagen
 
 
 tags_url = 'http://www.jango.com/players/usd'
-stream_url_format = 'http://www.jango.com/streams/321275470'
+stream_url_format = 'http://www.jango.com/streams/{}'
 
 
 # 113280941
@@ -29,7 +30,7 @@ def main():
         mp3_url = json.loads(stream_content.decode('utf-8'))['url']
 
         tags_request = requests.get(tags_url, cookies=cookies)
-        tags_content = tags_request.content.decode('utf-8')
+        tags_content = html.unescape(tags_request.content.decode('utf-8'))
         tags = json.loads(re.findall('.*\n_jm.song_info = (.+);\n', tags_content)[0])
 
         picture_url = 'http:' + re.findall("id='player_main_pic_img' alt='' title='' style='display:none;' src='(.*)'",
